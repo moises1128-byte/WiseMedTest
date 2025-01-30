@@ -6,9 +6,15 @@ import Huesos from "../../assets/images/svg/huesos.svg";
 import Face from "../../assets/images/svg/face.svg";
 import { Dropdown } from "react-native-element-dropdown";
 import { Shadow } from "react-native-shadow-2";
+import { Ficha_Paciente } from "@/utils/ficha-paciente";
+
+type EmergencyKind = {
+  id: string;
+  name: string;
+};
 
 export default function HomeScreen() {
-  const [emergencyKinds, setEmergencyKinds] = useState([]);
+  const [emergencyKinds, setEmergencyKinds] = useState<EmergencyKind[]>([]);
   const [selectedValue, setSelectedValue] = useState("");
 
   useEffect(() => {
@@ -23,15 +29,13 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f3edf7" }}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.subContainer}>
         <Shadow distance={5}>
-          <View style={styles.subContainer}>
+          <View style={styles.Card}>
             <View style={{ width: 276 }}>
               <View style={styles.titleContainer}>
-                <View
-                  style={{ display: "flex", flexDirection: "column", gap: 10 }}
-                >
+                <View style={styles.labelCardContainer}>
                   <Text style={styles.title}>Traumatología</Text>
                   <Text style={styles.subTitle}>Dr. José Pedro Sans</Text>
                 </View>
@@ -39,73 +43,85 @@ export default function HomeScreen() {
               </View>
 
               <View style={styles.subTitleContainer}>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 10,
-                  }}
-                >
-                  <Face width={24} height={24} />
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 10,
-                    }}
-                  >
-                    <Text style={styles.titleName}>Jorge Avendaño Pérez</Text>
-                    <Text style={styles.titleName}>35 años</Text>
-                  </View>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>Ficha médica:</Text>
-                  <Text style={styles.fichaText2}>77884</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>Diagnóstico:</Text>
-                  <Text style={styles.fichaText2}>Calcificación Talón</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>Intervención:</Text>
-                  <Text style={styles.fichaText2}>Extirpación en talón</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>
-                    Evaluación preanestésica:
-                  </Text>
-                  <Text style={styles.fichaText2}>Sí</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>Tiempo de solicitud:</Text>
-                  <Text style={styles.fichaText2}>3 días</Text>
-                </View>
-                <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
-                  <Text style={styles.fichaText}>Suspensiones:</Text>
-                  <Text style={styles.fichaText2}>2</Text>
-                </View>
+                {Ficha_Paciente.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <View style={styles.rowContainer}>
+                      <Face width={24} height={24} />
+                      <View style={styles.nameContainer}>
+                        <Text style={styles.titleName}>{item.nombre}</Text>
+                        <Text style={styles.titleName}>{item.edad} años</Text>
+                      </View>
+                    </View>
 
-                <View
-                  style={{ display: "flex", flexDirection: "row", gap: 10 }}
-                >
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>Ficha médica:</Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.fichaMedica}
+                      </Text>
+                    </View>
+
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>Diagnóstico:</Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.diagnostico}
+                      </Text>
+                    </View>
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>Intervención:</Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.intervencion}
+                      </Text>
+                    </View>
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>
+                        Evaluación preanestésica:
+                      </Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.evaluacion}
+                      </Text>
+                    </View>
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>
+                        Tiempo de solicitud:
+                      </Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.tiempo} días
+                      </Text>
+                    </View>
+                    <View style={styles.cardItem}>
+                      <Text style={styles.fichaInputText}>Suspensiones:</Text>
+                      <Text style={styles.itemTextInput}>
+                        {item.Suspension}
+                      </Text>
+                    </View>
+                  </React.Fragment>
+                ))}
+
+                <View style={styles.rowContainer}>
                   <Corazon width={24} height={24} />
                   <BolsaClinica width={24} height={24} />
                 </View>
 
-                <Dropdown
-                  style={styles.dropdown}
-                  data={emergencyKinds.map((item) => ({
-                    label: item.name || "Nombre no disponible",
-                    value: item.name || "",
-                  }))}
-                  labelField="label"
-                  valueField="value"
-                  placeholder="Seleccionar"
-                  value={selectedValue}
-                  onChange={(item) => {
-                    setSelectedValue(item.value);
-                  }}
-                />
+                <View style={styles.dropdownContainer}>
+                  <Text style={styles.label}>Tipo de Urgencia</Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.inputTxt}
+                    selectedTextStyle={styles.inputTxt}
+                    data={emergencyKinds.map((item) => ({
+                      label: item.name || "Nombre no disponible",
+                      value: item.name || "",
+                    }))}
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Seleccionar"
+                    iconColor={"#154FBF"}
+                    value={selectedValue}
+                    onChange={(item) => {
+                      setSelectedValue(item.value);
+                    }}
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -116,12 +132,15 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  fichaText: {
+  container: { flex: 1, backgroundColor: "#f3edf7" },
+  subContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  labelCardContainer: { display: "flex", flexDirection: "column", gap: 10 },
+  fichaInputText: {
     fontSize: 12,
     color: "#154FBF",
     fontFamily: "PoppinsRegular",
   },
-  fichaText2: {
+  itemTextInput: {
     fontSize: 12,
     color: "#000000",
     fontFamily: "PoppinsRegular",
@@ -147,8 +166,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
   },
   subTitleContainer: {
     paddingTop: 16,
@@ -157,7 +176,7 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 16,
   },
-  subContainer: {
+  Card: {
     display: "flex",
     flexDirection: "column",
     backgroundColor: "white",
@@ -170,6 +189,30 @@ const styles = StyleSheet.create({
     borderColor: "#154FBF",
     borderWidth: 1,
     borderRadius: 6,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  cardItem: { display: "flex", flexDirection: "row", gap: 5 },
+  rowContainer: { display: "flex", flexDirection: "row", gap: 10 },
+  nameContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+  },
+  inputTxt: {
+    fontSize: 16,
+    color: "#719ec0",
+    fontFamily: "PoppinsRegular",
+  },
+  label: {
+    fontSize: 14,
+    color: "#154FBF",
+    fontFamily: "PoppindsMedium",
+  },
+  dropdownContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 3,
+    paddingTop: 5,
   },
 });
