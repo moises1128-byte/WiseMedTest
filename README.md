@@ -3,8 +3,8 @@ Este proyecto es una aplicación móvil desarrollada con React Native.
 
 ## Requisitos Previos
 
-- Node.js (versión 14 o superior)
-- npm o yarn
+- Node.js (versión v18.20.4)
+- npm 
 - Expo CLI
 
 ## Instalación
