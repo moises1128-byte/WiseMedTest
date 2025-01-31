@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   titleName: {
     fontSize: 14,
     color: "#000000",
-    fontFamily: "PoppinsMedium",
+    fontFamily: "PoppindsMedium",
   },
   titleContainer: {
     backgroundColor: "#154FBF",
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: 10,
+    gap: 5,
   },
   inputTxt: {
     fontSize: 16,
